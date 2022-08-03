@@ -1,0 +1,17 @@
+domain: zeng.dev
+layout:
+- go.kubebuilder.io/v3
+multigroup: true
+projectName: kube-template
+repo: zeng.dev/kube-template
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zeng.dev
+  group: template
+  kind: Sample
+  path: zeng.dev/kube-template/apis/template/v1
+  version: v1
+version: "3"
