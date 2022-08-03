@@ -1,0 +1,6 @@
+apiVersion: fruit.zeng.dev/v1beta1
+kind: Apple
+metadata:
+  name: apple-sample
+spec:
+  # TODO(user): Add fields here

@@ -23,6 +23,7 @@ import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	fruitv1beta1 "zeng.dev/kube-template/apis/fruit/v1beta1"
 	templatev1 "zeng.dev/kube-template/apis/template/v1"
 )
 
@@ -30,6 +31,7 @@ var Scheme = runtime.NewScheme()
 var Codecs = serializer.NewCodecFactory(Scheme)
 var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
+	fruitv1beta1.AddToScheme,
 	templatev1.AddToScheme,
 }
 

@@ -14,4 +14,13 @@ resources:
   kind: Sample
   path: zeng.dev/kube-template/apis/template/v1
   version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zeng.dev
+  group: fruit
+  kind: Apple
+  path: zeng.dev/kube-template/apis/fruit/v1beta1
+  version: v1beta1
 version: "3"

@@ -1,0 +1,20 @@
+# permissions for end users to view apples.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: apple-viewer-role
+rules:
+- apiGroups:
+  - fruit.zeng.dev
+  resources:
+  - apples
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - fruit.zeng.dev
+  resources:
+  - apples/status
+  verbs:
+  - get

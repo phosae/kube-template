@@ -24,6 +24,8 @@ import (
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
 	clientset "zeng.dev/kube-template/client/versioned"
+	fruitv1beta1 "zeng.dev/kube-template/client/versioned/typed/fruit/v1beta1"
+	fakefruitv1beta1 "zeng.dev/kube-template/client/versioned/typed/fruit/v1beta1/fake"
 	templatev1 "zeng.dev/kube-template/client/versioned/typed/template/v1"
 	faketemplatev1 "zeng.dev/kube-template/client/versioned/typed/template/v1/fake"
 )
@@ -74,6 +76,11 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 }
 
 var _ clientset.Interface = &Clientset{}
+
+// FruitV1beta1 retrieves the FruitV1beta1Client
+func (c *Clientset) FruitV1beta1() fruitv1beta1.FruitV1beta1Interface {
+	return &fakefruitv1beta1.FakeFruitV1beta1{Fake: &c.Fake}
+}
 
 // TemplateV1 retrieves the TemplateV1Client
 func (c *Clientset) TemplateV1() templatev1.TemplateV1Interface {

@@ -31,8 +31,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
+	fruitv1beta1 "zeng.dev/kube-template/apis/fruit/v1beta1"
 	templatev1 "zeng.dev/kube-template/apis/template/v1"
 	"zeng.dev/kube-template/client/versioned"
+	fruitcontrollers "zeng.dev/kube-template/controllers/fruit"
 	templatecontrollers "zeng.dev/kube-template/controllers/template"
 	//+kubebuilder:scaffold:imports
 )
@@ -46,6 +48,7 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(templatev1.AddToScheme(scheme))
+	utilruntime.Must(fruitv1beta1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
@@ -96,6 +99,13 @@ func main() {
 		Scheme:    mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Sample")
+		os.Exit(1)
+	}
+	if err = (&fruitcontrollers.AppleReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Apple")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

@@ -45,22 +45,23 @@ manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and Cust
 
 .PHONY: generate
 generate: client-gen informer-gen lister-gen controller-gen ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
-	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 	$(CLIENT_GEN) --clientset-name versioned \
 	--input-base zeng.dev/kube-template/apis \
-	--input template/v1 \
+	--input template/v1,fruit/v1beta1 \
 	--output-package "zeng.dev/kube-template/client" \
 	--go-header-file hack/boilerplate.go.txt
 	$(LISTER_GEN) \
-    --input-dirs zeng.dev/kube-template/apis/template/v1 \
+    --input-dirs zeng.dev/kube-template/apis/template/v1,zeng.dev/kube-template/apis/fruit/v1beta1 \
     --output-package "zeng.dev/kube-template/client/listers" \
     --go-header-file hack/boilerplate.go.txt
 	$(INFORMER_GEN) \
-    --input-dirs zeng.dev/kube-template/apis/template/v1 \
+    --input-dirs zeng.dev/kube-template/apis/template/v1,zeng.dev/kube-template/apis/fruit/v1beta1 \
+	--single-directory \
     --versioned-clientset-package "zeng.dev/kube-template/client/versioned" \
     --listers-package "zeng.dev/kube-template/client/listers" \
     --output-package "zeng.dev/kube-template/client/informers" \
     --go-header-file hack/boilerplate.go.txt
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.

@@ -26,7 +26,7 @@ import (
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
 	templatev1 "zeng.dev/kube-template/apis/template/v1"
-	internalinterfaces "zeng.dev/kube-template/client/informers/externalversions/internalinterfaces"
+	internalinterfaces "zeng.dev/kube-template/client/informers/internalinterfaces"
 	v1 "zeng.dev/kube-template/client/listers/template/v1"
 	versioned "zeng.dev/kube-template/client/versioned"
 )

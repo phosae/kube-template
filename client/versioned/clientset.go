@@ -23,11 +23,13 @@ import (
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
+	fruitv1beta1 "zeng.dev/kube-template/client/versioned/typed/fruit/v1beta1"
 	templatev1 "zeng.dev/kube-template/client/versioned/typed/template/v1"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
+	FruitV1beta1() fruitv1beta1.FruitV1beta1Interface
 	TemplateV1() templatev1.TemplateV1Interface
 }
 
@@ -35,7 +37,13 @@ type Interface interface {
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	templateV1 *templatev1.TemplateV1Client
+	fruitV1beta1 *fruitv1beta1.FruitV1beta1Client
+	templateV1   *templatev1.TemplateV1Client
+}
+
+// FruitV1beta1 retrieves the FruitV1beta1Client
+func (c *Clientset) FruitV1beta1() fruitv1beta1.FruitV1beta1Interface {
+	return c.fruitV1beta1
 }
 
 // TemplateV1 retrieves the TemplateV1Client
@@ -64,6 +72,10 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
+	cs.fruitV1beta1, err = fruitv1beta1.NewForConfig(&configShallowCopy)
+	if err != nil {
+		return nil, err
+	}
 	cs.templateV1, err = templatev1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
@@ -80,6 +92,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
+	cs.fruitV1beta1 = fruitv1beta1.NewForConfigOrDie(c)
 	cs.templateV1 = templatev1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
@@ -89,6 +102,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
+	cs.fruitV1beta1 = fruitv1beta1.New(c)
 	cs.templateV1 = templatev1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)

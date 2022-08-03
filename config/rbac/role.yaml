@@ -6,6 +6,32 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
+  - fruit.zeng.dev
+  resources:
+  - apples
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - fruit.zeng.dev
+  resources:
+  - apples/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - fruit.zeng.dev
+  resources:
+  - apples/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - template.zeng.dev
   resources:
   - samples
