@@ -43,6 +43,8 @@ help: ## Display this help.
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
 	$(CONTROLLER_GEN) rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
+EXTERNAL_APIS_CSV ?= $(shell cd ../.. && find zeng.dev/kube-template/apis -name *types.go -print0 | xargs -0 -n1 dirname | tr '\n' ',' | sed "s/,$$//g")
+
 .PHONY: generate
 generate: client-gen informer-gen lister-gen controller-gen ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
 	$(CLIENT_GEN) --clientset-name versioned \
@@ -51,11 +53,11 @@ generate: client-gen informer-gen lister-gen controller-gen ## Generate code con
 	--output-package "zeng.dev/kube-template/client" \
 	--go-header-file hack/boilerplate.go.txt
 	$(LISTER_GEN) \
-    --input-dirs zeng.dev/kube-template/apis/template/v1,zeng.dev/kube-template/apis/fruit/v1beta1 \
+    --input-dirs $(EXTERNAL_APIS_CSV) \
     --output-package "zeng.dev/kube-template/client/listers" \
     --go-header-file hack/boilerplate.go.txt
 	$(INFORMER_GEN) \
-    --input-dirs zeng.dev/kube-template/apis/template/v1,zeng.dev/kube-template/apis/fruit/v1beta1 \
+    --input-dirs $(EXTERNAL_APIS_CSV) \
 	--single-directory \
     --versioned-clientset-package "zeng.dev/kube-template/client/versioned" \
     --listers-package "zeng.dev/kube-template/client/listers" \
