@@ -43,6 +43,10 @@ help: ## Display this help.
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
 	$(CONTROLLER_GEN) rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
+##@ client listers and informers input-dirs
+
+# Search project *types.go in apis directory, output oneline string in this formart:
+# zeng.dev/kube-template/apis/template/v1,zeng.dev/kube-template/apis/fruit/v1beta1
 EXTERNAL_APIS_CSV ?= $(shell cd ../.. && find zeng.dev/kube-template/apis -name *types.go -print0 | xargs -0 -n1 dirname | tr '\n' ',' | sed "s/,$$//g")
 
 .PHONY: generate
